@@ -1,0 +1,268 @@
+<html>
+<style>
+.btn-primary{
+margin-top: 50px;
+margin-right:30px;
+height: 60px;
+}
+.model-dialog{
+  width: 500%;
+}
+
+table {
+  width:60%;
+  margin-top: 20px;
+  margin-left: 30px;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 15px;
+  text-align: left;
+}
+table#t01 tr:nth-child(even) {
+  background-color: #green;
+}
+table#t01 tr:nth-child(odd) {
+ background-color: skyblue;
+}
+table#t01 th {
+  background-color: black;
+  color: white;
+}
+#t01{
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 60%;
+  align-content: center;
+  margin-left: 400px;
+}
+
+#t01 td, #t01 th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#t01 tr:nth-child(even){background-color:grey;}
+#t01 tr:nth-child(odd){background-color:lightgrey;}
+
+#t01 tr:hover {background-color: #ddd;}
+
+#t01 th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #00b300;
+  color: #361c73;
+}
+</style>
+  <body style="background-color: #008080">
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<button class="btn btn-primary" style="float: right; border-radius: 12px;" type="button"  data-toggle="modal" data-target="#myModal">
+    ADD Teacher
+  </button>
+  <form action="http://127.0.0.1:5000/">
+  <button style="float: left;border-radius: 12px; margin-top: 50px;margin-left:20px;height: 60px;" class="btn-danger">BACK<-'</button></form>
+    <center>  <h1>List   of   Teachers</h1></center>
+      <table id="t01">
+    {%for teacher in teachers%}
+
+    <tr>
+      <td><p>{{teacher.department_name}}</p></td>
+      <td><p>{{teacher.is_hod}}</p></td>
+     <td> <p>{{teacher.teaching_subjects}}</p></td>
+     <td><button data-toggle="modal" onclick="getId('{{teacher.S_No}}')" class="btn btn-warning" data-target="#myModal2{{teacher.S_No}}" >EDIT</button></td>
+     <td><form action="teachers/delete/{{teacher.S_No}}" ><button class="btn btn-danger" onclick ="delete1()">DELETE</button></form></td>
+
+
+</tr>
+
+  <div class="modal" id=myModal2{{teacher.S_No}}>
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">UPDATE USER</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+      <div class="modal-body form" >
+        <form class="form-horizontal" name="updateform">
+          <div class="form-group">
+            <div class="col-sm-15">
+              <label class="control-label col-sm-6" for="department_name">Department name:</label>
+              <input type="hidden" class="id" value="{{teacher.S_No}}">
+              <input type="text" id="d_name_{{teacher.S_No}}"value="{{teacher.department_name}}"name="department_name" placeholder="department_name" required >
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-15">
+            <label class="control-label col-sm-6" for="is_hod">Is hod:</label>
+              <input type="text"value="{{teacher.is_hod}}" id="hod_{{teacher.S_No}}" name="is_hod" placeholder="is_hod" required >
+            </div>
+          </div>
+            <div class="form-group">
+              <div class="col-sm-15">
+              <label class="control-label col-sm-6" for="teaching_subjects">Teaching subject:</label>
+              <input type="text"value="{{teacher.teaching_subjects}}" id="sub_{{teacher.S_No}}" name="teaching_subjects" placeholder="teaching_subjects" required >
+            </div>
+          </div>
+           <div class="form-group">
+             <div class="col-sm-offset-2 col-sm-10">
+               <center><button class="beta" id="update_btn" >UPDATE</button></center>
+            </div>
+           </div> 
+         </form>
+      </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+    {% endfor %}
+</table>
+
+  <!-- The Modal -->
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title"></h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body" style="width:1250px;">
+          <form name="form12" >
+             <label for="department_name"><b> Department_name</b></label><br>
+              <input type="text" id="1" name="department_name" required> <br>   
+              <label for="is_hod"><b> Is_hod</b></label><br>
+              <input type="text" id="2" name="is_hod" required><br>
+              <label for="teaching_subjects"><b>Teaching_subjects</b></label><br>
+             <input type="text" id="3" name="teaching_subjects" required><br><br>
+            <button id="add_btn">ADD</button>
+          </form>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+  
+</div>
+
+<script type="text/javascript">
+  function getId(id)
+  {
+    $(".id").val(id);
+  }
+
+  $(".beta").click(function(){
+      var id = $(".id").val();
+      var d_name = $("#d_name_"+id).val();
+      var hod = $("#hod_"+id).val();               
+      var sub = $("#sub_"+id).val();  
+      var data = { 's_no':id,
+          'department_name':d_name,
+          'is_hod': hod ,
+          'teaching_subjects':sub
+      }
+      if(d_name==""){
+        window.alert("Enter teachers name");
+        return false;
+      }
+      if(hod==""){
+        window.alert("Enter field 2");
+        return false;
+      }
+      if(sub==""){
+        
+        window.alert("Enter name of subjects");
+        return false;
+      }
+      
+      $.ajax({
+        type : 'POST',
+              url : "/teachers/update",
+              contentType: 'application/json',
+              data : JSON.stringify(data),
+              success: function (data)
+              {
+                console.log(data);
+                location.reload();
+            window.alert("User updated successfully");
+            
+               },
+               error: function(result){
+                window.alert("There was an error.");
+                location.reload()
+               }
+
+      });
+      return false; 
+
+    });
+
+
+   $("#add_btn").click(function() {
+        var d_name = $("#1").val();
+        var hod = $("#2").val();                  
+        var sub = $("#3").val();  
+         if(d_name==""){
+        window.alert("Enter teachers name");
+        return false;
+      }
+      if(hod==""){
+        window.alert("Enter field 2");
+        return false;
+      }
+      if(sub==""){        
+        window.alert("Enter name of subjects");
+        return false;
+      }  
+           $.ajax({
+                     data:{
+                        'department_name':d_name,
+                        'is_hod': hod,
+                        'teaching_subjects': sub
+                          },
+                     type: "POST",
+                     url: "/teachers/add",
+                       success: function(result) {
+            location.reload();
+            window.alert("User added successfully");}
+                 });
+
+
+            return false; 
+
+    });
+   function delete1() {
+  window.alert("User deleted successfully")
+}
+
+</script>
+  </body>
+</html>
